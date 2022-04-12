@@ -1,0 +1,88 @@
+{% extends "base.html" %} {% block title %}Weight Lifting: {% endblock %} {%
+block content %}
+<form method="POST">
+  <h3 align="center">3 Main Lifts</h3>
+  <div class="form-group">
+    <label for="bench">1RM Bench</label>
+    <input
+      type="bench"
+      class="form-control"
+      id="bench"
+      name="bench"
+      placeholder="Enter 1RM Bench"
+    />
+  </div>
+  <div class="form-group">
+    <label for="squat">1RM Squat</label>
+    <input
+      type="squat"
+      class="form-control"
+      id="squat"
+      name="squat"
+      placeholder="Enter 1RM Squat"
+    />
+  </div>
+  <div class="form-group">
+    <label for="deadlift">1RM Deadlift</label>
+    <input
+      type="deadlift"
+      class="form-control"
+      id="deadlift"
+      name="deadlift"
+      placeholder="Enter 1RM Deadlift"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">
+    Calculate Lifting Programs
+  </button>
+</form>
+<br />
+<br />
+<br />
+<h2>
+  <p>
+    Bench Program: (Monday & Thursday) <br />
+    Max: {{ bench }}<br />
+    One Set Of Each:<br />
+    10 - {{ b1 }}<br />
+    5 - {{ b2 }}<br />
+    5 - {{ b3 }}<br />
+    3 - {{ b4 }}<br />
+    1 - {{ b5 }}<br />
+    1 - {{ b6 }}<br />
+    5 - {{ b3 }}<br />
+    If you complete every set add 5lbs to max for next workout!<br />
+  </p>
+  <br />
+  <p>
+    Squat Program: (Tuesday & Friday)<br />
+    Max: {{ squat }}<br />
+    2 x 10 - {{sq1}}<br />
+    2 x 10 - {{sq2}}<br />
+    2 x 5 - {{sq3}}<br />
+    2 x 5 - {{sq4}}<br />
+    3 x 3 - {{sq5}}<br />
+    1 x 3 - {{sq6}}<br />
+    1 x 3 - {{sq7}}<br />
+    1 x 1 - {{sq8}}<br />
+    AMRAP - {{sq6}}<br />
+    If you complete every set and get 5+ on the last set move up 5 lbs on your
+    max!<br />
+  </p>
+  <br />
+  <p>
+    Deadlift Program: (Wednesday)<br />
+    Max: {{ deadlift }}<br />
+    1 x 10 - {{dl1}}<br />
+    1 x 10 - {{dl2}}<br />
+    1 x 8 - {{dl3}}<br />
+    1 x 5 - {{dl4}}<br />
+    1 x 5 - {{dl5}}<br />
+    1 x 3 - {{dl6}}<br />
+    3 x 3 - {{dl7}}<br />
+    3 x 1 - {{dl8}}<br />
+    If you complete every set move up 5 lbs on your max!<br />
+  </p>
+</h2>
+{% endblock %}

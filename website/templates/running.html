@@ -1,0 +1,30 @@
+{% extends "base.html" %} {% block title %}Running: {% endblock %} {% block
+content %}
+<form method="POST">
+  <h3 align="center">Mile & 5K Training</h3>
+  <div class="form-group">
+    <label for="mile">Mile</label>
+    <input
+      type="mile"
+      class="form-control"
+      id="mile"
+      name="mile"
+      placeholder="Enter Mile PR"
+    />
+  </div>
+  <div class="form-group">
+    <label for="five_k">5K</label>
+    <input
+      type="five_k"
+      class="form-control"
+      id="five_k"
+      name="five_k"
+      placeholder="Enter 5K PR"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">
+    Calculate Running Programs
+  </button>
+</form>
+{% endblock %}

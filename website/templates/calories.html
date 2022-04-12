@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %}Nutrition: {% endblock %} {% block
+content %}
+<form method="POST">
+  <h3 align="center">Food Item</h3>
+  <div class="form-group">
+    <label for="food">Food Item</label>
+    <input
+      type="food"
+      class="form-control"
+      id="food"
+      name="food"
+      placeholder="Enter Food"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Log Food</button>
+</form>
+{% endblock %}

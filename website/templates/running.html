@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Running: {% endblock %} {% block
 content %}
-<form method="POST">
+<form method="POST" action="/running">
   <h3 align="center">Mile & 5K Training</h3>
   <div class="form-group">
     <label for="mile">Mile</label>
@@ -27,4 +27,25 @@ content %}
     Calculate Running Programs
   </button>
 </form>
+<br />
+<br />
+<br />
+<h2>
+  <p>
+    Mile Training:<br />
+    Monday: 3 miles @ {{ mlm }} pace<br />
+    Tuesday: 3 miles @ {{ mlt }} pace<br />
+    Thursday: 2 miles @ {{ mlth }} pace<br />
+    Saturday: Attempt new mile PR!<br />
+    If a new mile PR is acheived enter the new time!
+  </p>
+  <p>
+    5K Training:<br />
+    Monday: 15k @ {{ fkm }} pace <br />
+    Tuesday: 10k @ {{ fkt }} pace<br />
+    Thursday: 8k @ {{ fkth }} pace<br />
+    Saturday: Attempt new 5K PR!<br />
+    If a new 5K PR is achieved enter new time!
+  </p>
+</h2>
 {% endblock %}

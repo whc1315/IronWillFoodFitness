@@ -14,31 +14,7 @@ class User(db.Model, UserMixin):
     bench = db.Column(db.Integer)
     squat = db.Column(db.Integer)
     deadlift = db.Column(db.Integer)
-    runs = db.relationship('Run')
-    lifts = db.relationship('Lift')
-    foods = db.relationship('Food')
+    calories = db.Column(db.Float)
 
     def get_id(self):
         return (self.user_id)
-
-
-class Run(db.Model):
-    running_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    running_cals = db.Column(db.Integer)
-    datetime = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
-class Lift(db.Model):
-    lift_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    lifting_cals = db.Column(db.Integer)
-    datetime = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
-class Food(db.Model):
-    food_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    food_item = db.Column(db.String(150))
-    cals_eaten = db.Column(db.Integer)
-    datetime = db.Column(db.DateTime(timezone=True), default=func.now())

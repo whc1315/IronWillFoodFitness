@@ -1,7 +1,13 @@
 {% extends "base.html" %} {% block title %}Nutrition: {% endblock %} {% block
 content %}
 <form method="POST">
-  <h3 align="center">Food Item</h3>
+  <h2 align="center">Daily Calories</h2>
+  <br />
+  <h4>
+    You can specify quantity, For example. 3 eggs, or 1lb beef brisket. If no
+    quantity is given the default quantity is 100g.
+  </h4>
+  <br /><br />
   <div class="form-group">
     <label for="food">Food Item</label>
     <input
@@ -13,6 +19,28 @@ content %}
     />
   </div>
   <br />
-  <button type="submit" class="btn btn-primary">Log Food</button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    name="submit_button"
+    value="log"
+  >
+    Log Food
+  </button>
+  <br /><br /><br />
+  <h2>{{ item }}</h2>
+  <h4>{{ cals }} Calories</h4>
+  <br /><br />
+  <h4>Total Calories Today: (Reset each Morning)</h4>
+  <br />
+  <h3>{{ user.calories }}</h3>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    name="submit_button"
+    value="reset_cals"
+  >
+    Reset Daily Calories
+  </button>
 </form>
 {% endblock %}

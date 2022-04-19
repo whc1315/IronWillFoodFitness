@@ -1,10 +1,14 @@
 from unittest.util import _MAX_LENGTH
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User, Run, Lift, Food
+from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+import math
+import os
+import requests
 
+API_KEY = os.environ['API_KEY']
 
 auth = Blueprint('auth', __name__)
 
@@ -52,6 +56,7 @@ def sign_up():
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
                 password1, method='sha256'))
             db.session.add(new_user)
+            new_user.calories = 0
             db.session.commit()
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
@@ -71,19 +76,24 @@ def logout():
 @login_required
 def weights():
     if request.method == 'POST':
-        bench = request.form.get('bench')
-        squat = request.form.get('squat')
-        deadlift = request.form.get('deadlift')
+        try:
+            bench = int(float(request.form.get('bench')))
+            squat = int(float(request.form.get('squat')))
+            deadlift = int(float(request.form.get('deadlift')))
+        except:
+            bench = request.form.get('bench')
+            squat = request.form.get('squat')
+            deadlift = request.form.get('deadlift')
 
         user = current_user
 
         if user:
-            if isinstance(bench, str) != True or isinstance(squat, str) != True or isinstance(deadlift, str) != True:
+            if isinstance(bench, int) != True or isinstance(squat, int) != True or isinstance(deadlift, int) != True:
                 flash('Please enter valid numbers for all lifts.', category='error')
             else:
-                bch = int(float(bench))
-                sqt = int(float(squat))
-                dl = int(float(deadlift))
+                bch = bench
+                sqt = squat
+                dl = deadlift
 
                 b1 = 5*(round(bch*.333/5))
                 b2 = 5*(round(bch*.58/5))
@@ -124,38 +134,79 @@ def weights():
 @login_required
 def running():
     if request.method == 'POST':
-        mile = request.form.get('mile')
-        five_k = request.form.get('five_k')
+        try:
+            mile = float(request.form.get('mile'))
+            five_k = float(request.form.get('five_k'))
+        except:
+            mile = request.form.get('mile')
+            five_k = request.form.get('five_k')
 
         user = current_user
 
         if user:
-            if mile is None or five_k is None:
-                flash('Please enter valid numbers for all runs.', category='error')
+            if isinstance(mile, float) != True or isinstance(five_k, float) != True:
+                flash('Please enter valid numbers for all runs.',
+                      category='error')
             else:
-                ml = int(float(mile))
-                fivek = int(float(five_k))
+                ml = float(mile)
+                mlminsec = math.modf(ml)
+                mlmin = mlminsec[1]
+                mlsec = mlminsec[0]
+                fivek = float(five_k)
+                fivekminsec = math.modf(fivek)
+                fivekmin = fivekminsec[1]
+                fiveksec = fivekminsec[0]
 
-                mlm = ml*2
-                mlt = ml*1.5
-                mlth = ml*1.25
-                mls = ml
+                mlm = round((mlmin*2 + (.6*mlsec)), 2)
+                mlt = round((mlmin*1.75 + (.6*mlsec)), 2)
+                mlth = round((mlmin*1.25 + (.6*mlsec)), 2)
 
-                fkm = fivek*2
-                fkt = fivek*1.5
-                fkth = fivek*1.25
-                fks = fivek
+                fkm = round((fivekmin*1.5 + (.6*fiveksec)), 2)
+                fkt = round((fivekmin*1.4 + (.6*fiveksec)), 2)
+                fkth = round((fivekmin*1.25 + (.6*fiveksec)), 2)
 
                 user.mile = mile
                 user.five_k = five_k
                 db.session.commit()
 
-                return render_template("running.html", user=current_user, mlm=mlm, mlt=mlt, mlth=mlth, mls=mls, fkm=fkm, fkt=fkt, fkth=fkth, fks=fks)
+                return render_template("running.html", user=current_user, mlm=mlm, mlt=mlt, mlth=mlth, fkm=fkm, fkt=fkt, fkth=fkth)
 
     return render_template("running.html", user=current_user)
 
 
-@auth.route('/calories', methods=['GET', 'POST'])
-@login_required
+@ auth.route('/calories', methods=['GET', 'POST'])
+@ login_required
 def calories():
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'log':
+            user = current_user
+            api_url = 'https://api.calorieninjas.com/v1/nutrition?query='
+            query = request.form.get('food')
+            response = requests.get(
+                api_url + query, headers={'X-Api-Key': API_KEY})
+
+            if response.status_code == requests.codes.ok:
+                print(response.text)
+                food_nut = response.text
+                item = request.form.get('food')
+                split = food_nut.split(',')
+                food_cal = split[8]
+                split1 = food_cal.split(':')
+                cals = float(split1[1])
+                curr_cals = user.calories + cals
+
+                user.calories = round(curr_cals, 2)
+                db.session.commit()
+
+                return render_template("calories.html", user=current_user, item=item, cals=cals)
+            else:
+                print("Error:", response.status_code, response.text)
+        elif request.form['submit_button'] == 'reset_cals':
+            user = current_user
+            user.calories = 0
+            db.session.commit()
+            return render_template("calories.html", user=current_user)
+        else:
+            return render_template("calories.html", user=current_user)
+
     return render_template("calories.html", user=current_user)

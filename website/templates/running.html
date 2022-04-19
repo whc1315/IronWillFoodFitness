@@ -9,7 +9,7 @@ content %}
       class="form-control"
       id="mile"
       name="mile"
-      placeholder="Enter Mile PR"
+      placeholder="Enter Mile PR in 00.00 format"
     />
   </div>
   <div class="form-group">
@@ -19,7 +19,7 @@ content %}
       class="form-control"
       id="five_k"
       name="five_k"
-      placeholder="Enter 5K PR"
+      placeholder="Enter 5K PR in 00.00 format"
     />
   </div>
   <br />
@@ -33,17 +33,19 @@ content %}
 <h2>
   <p>
     Mile Training:<br />
-    Monday: 3 miles @ {{ mlm }} pace<br />
-    Tuesday: 3 miles @ {{ mlt }} pace<br />
-    Thursday: 2 miles @ {{ mlth }} pace<br />
+    Mile PR: {{ user.mile }}<br />
+    Monday: 3 miles @ {{ mlm }} mile pace<br />
+    Tuesday: 3 miles @ {{ mlt }} mile pace<br />
+    Thursday: 2 miles @ {{ mlth }} mile pace<br />
     Saturday: Attempt new mile PR!<br />
     If a new mile PR is acheived enter the new time!
   </p>
   <p>
     5K Training:<br />
-    Monday: 15k @ {{ fkm }} pace <br />
-    Tuesday: 10k @ {{ fkt }} pace<br />
-    Thursday: 8k @ {{ fkth }} pace<br />
+    5K PR: {{ user.five_k }}<br />
+    Monday: 15k @ {{ fkm }} 5k pace <br />
+    Tuesday: 10k @ {{ fkt }} 5k pace<br />
+    Thursday: 8k @ {{ fkth }} 5k pace<br />
     Saturday: Attempt new 5K PR!<br />
     If a new 5K PR is achieved enter new time!
   </p>
